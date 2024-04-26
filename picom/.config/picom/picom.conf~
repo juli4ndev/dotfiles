@@ -1,0 +1,14 @@
+corner-radius = 8;
+shadow = false;
+shadow-red = false;
+
+inactive-opacity = 0.94;
+active-opacity = 0.94;
+
+backend = "xrender";
+vsync = false;
+
+detect-rounded-corners = true;
+refresh-rate = 60;
+
+use-damage = true;

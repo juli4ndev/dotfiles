@@ -1,0 +1,59 @@
+* {
+    all: unset; // Unsets everything so you can style everything from scratch
+}
+
+//Global Styles
+
+.main {
+    background: #282828;
+    border-radius: 8px;
+}
+
+.wrapper {
+    border-radius: 8px;
+    padding: 4px 10px;
+    background: #8d64cd;
+
+    &.launcher {
+	image {
+	    margin: 0 10px;
+	}
+    }
+}
+
+.xx-small {
+    font-size: 0.563rem;
+}
+
+.x-small {
+    font-size: 0.625rem;
+}
+
+.small {
+    font-size: 0.813rem;
+}
+
+.medium {
+    font-size: 1rem;
+}
+
+.large {
+    font-size: 1.125rem;
+}
+
+.x-large {
+    font-size: 1.5rem;
+}
+
+.xx-large {
+    font-size: 2rem;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.card {
+    background-color: #666;
+    border-radius: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

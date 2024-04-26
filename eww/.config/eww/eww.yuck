@@ -1,0 +1,113 @@
+(deflisten wmstate "leftwm-state")
+
+(defpoll time :interval "5s" `date +\"%I:%M %p\"`)
+
+(defpoll wifi :interval "5s" `nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2`)
+
+(defpoll muted :interval "0.5s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep '^Volume:' | awk -F'[][]' '{print $2}'`)
+
+(defpoll volume :interval "0.5s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep '^Volume:' | cut -d: -f2 | awk '{printf "%.0f", $1*100}'`)
+
+(defwidget launcher []
+  (eventbox
+    :onclick "rofi -show"
+    :class "wrapper launcher"
+      (image :path "./images/rocket-search.png")))
+
+(defwidget workspaces []
+  (box
+    :class "wrapper workspaces"
+    :orientation "h"
+    :space-evenly "false"
+    :valign "center"
+    :spacing 5
+      (for tag in '${wmstate.workspaces[0].tags}'
+        (image
+	  :path {tag.mine ? "./images/atom.png" :
+	         tag.busy ? "./images/circle.png" :
+		 "./images/record.png"}))))
+
+(defwidget window_title []
+  (box
+    :class "wrapper window-title"
+    :orientation "h"
+    :space-evenly "false"
+    :valign "center"
+    :halign "center"
+    :spacing 10
+      (label
+        :limit-width "30"
+        :text {wmstate.window_title == "" ? "Empty" : wmstate.window_title})))
+
+(defwidget clock []
+      (label :class "medium" :halign "start" :text time))
+
+(defwidget sound []
+  (eventbox
+    :onscroll "if [ {} = \"up\" ]; then wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 0.01+; else wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01-; fi"
+    :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    (image
+      :tooltip {volume}
+      :path {muted == "MUTED" ? "./images/volume-mute.png" :
+             volume <= 25 ? "./images/volume.png" :
+             volume <= 50 ? "./images/volume-low.png" :
+	     volume <= 75 ? "./images/volume-medium.png" :
+	     volume <= 100 ? "./images/volume-high.png" :
+	     "./images/volume-mute.png"})))
+
+(defwidget wifi []
+  (box :class "wifi" :orientation "h" :space-evenly "false" :valign "center"
+    (image :path {wifi == "" ? "./images/wifi-error.png" : "./images/wifi.png"} :tooltip wifi)))
+
+(defwidget battery []
+  (box :class "battery" :orientation "h" :space-evenly "false" :valign "center" :halign "center"
+    (image
+      :tooltip {EWW_BATTERY.BAT0.capacity+"%"}
+      :path {EWW_BATTERY.BAT0.status == "Charging" ? "./images/charging.png" :
+	     EWW_BATTERY.BAT0.capacity <= 10 ? "./images/empty-battery.png" :
+	     EWW_BATTERY.BAT0.capacity <= 20 ? "./images/low-battery.png" :
+	     EWW_BATTERY.BAT0.capacity <= 75 ? "./images/half-battery.png" :
+	     EWW_BATTERY.BAT0.capacity <= 100 ? "./images/full-battery.png" : "./images/no-charge-battery.png"})))
+
+(defwidget power []
+  (box :class "power" :orientation "h" :space-evenly "false" :valign "center"
+    (button :class "large" :onclick "rofi -show"
+      (image :path "./images/power-switch.png"))))
+
+(defwidget system []
+  (box :class "wrapper system" :orientation "h" :space-evenly "false" :valign "center" :spacing "10"
+    (sound)
+    (wifi)
+    (battery)
+    (clock)
+    (power)))
+
+(defwidget rightbox []
+  (box :class "system" :orientation "h" :space-evenly "false" :valign "center" :halign "end" :spacing "10"
+    (systray :class "wrapper systray" :orientation "h" :prepend-new "true" :icon-size "18" :spacing "10")
+    (system)))
+
+(defwidget leftbox []
+  (box
+    :class "leftbox"
+    :orientation "h"
+    :space-evenly "false"
+    :valign "center"
+    :spacing 10
+    (launcher)
+    (workspaces)))
+
+(defwidget bar []
+  (centerbox :orientation "h" :spacing "10" 
+    (leftbox)
+    (window_title)
+    (rightbox)))
+
+(defwindow main
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :width "100%" :height "2%" :anchor "top center")
+  :reserve (struts :distance "2%" :side "top")
+  :wm-ignore false
+  :stacking "fg"
+  (bar))

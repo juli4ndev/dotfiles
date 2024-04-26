@@ -26,7 +26,18 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# set PATH so it includes cargo's bin if it exists
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+# set PATH so it includes volta's bin if it exists
+if [ -d "$HOME/.volta/bin" ] ; then
+    export VOLTA_HOME="$HOME/.volta"
+    PATH="$VOLTA_HOME/bin:$PATH"
+fi
+
 # if tty is 1, xinit is executed
 [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty1' ] && exec xinit -- vt01
 
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
