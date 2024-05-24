@@ -11,6 +11,10 @@ fi
 # load the down script to the expected location
 ln -s $SCRIPTPATH/down /tmp/leftwm-theme-down
 
+if [ -x "$(command -v wired)" ]; then
+   wired &
+fi
+
 if [ -x "$(command -v feh)" ]; then
     feh --bg-scale $SCRIPTPATH/wallpaper.jpg 
 fi
@@ -24,8 +28,12 @@ if [ -x "$(command -v eww)" ]; then
     eww open main &
 fi
 
-if [ -x "$(command -v wired)" ]; then
-    wired &
+if [ -x "$(command -v emacs)" ]; then
+    emacs --bg-daemon
+fi
+
+if [ -x "$(command -v flameshot)" ]; then
+    flameshot &
 fi
 
 # The "current" folder is not working correctly, so i have to apply this wea.

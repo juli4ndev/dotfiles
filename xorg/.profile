@@ -9,11 +9,8 @@
 #umask 022
 
 # if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
+if [ -f "$HOME/.bashrc" ]; then
+	  . "$HOME/.bashrc"
 fi
 
 # set PATH so it includes user's private bin if it exists
@@ -27,17 +24,21 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # set PATH so it includes cargo's bin if it exists
-if [ -d "$HOME/.cargo/bin" ] ; then
-    PATH="$HOME/.cargo/bin:$PATH"
-fi
+# if [ -d "$HOME/.cargo/bin" ] ; then
+#     PATH="$HOME/.cargo/bin:$PATH"
+# fi
 
 # set PATH so it includes volta's bin if it exists
-if [ -d "$HOME/.volta/bin" ] ; then
-    export VOLTA_HOME="$HOME/.volta"
-    PATH="$VOLTA_HOME/bin:$PATH"
+# if [ -d "$HOME/.volta/bin" ] ; then
+#     export VOLTA_HOME="$HOME/.volta"
+#     PATH="$VOLTA_HOME/bin:$PATH"
+# fi
+
+if [ -d "/usr/local/go/bin" ] ; then
+    PATH="/usr/local/go/bin:$PATH"
 fi
+
+[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
 
 # if tty is 1, xinit is executed
 [ -z "$DISPLAY" -a "$(tty)" = '/dev/tty1' ] && exec xinit -- vt01
-
-# . "$HOME/.cargo/env"

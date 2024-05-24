@@ -1,6 +1,6 @@
 (
 	max_notifications: 0,
-	timeout: 20000,
+	timeout: 5000,
 	poll_interval: 16,
 	shortcuts: (
 		notification_interact: 2,
@@ -50,12 +50,12 @@
             offset: Vec2(x: 0.0, y: 0.0),
             params: TextBlock((
                 text: "%s",
-                font: "Arial Bold 11",
+                font: "Noto Sans Mono Bold 10",
                 ellipsize: Middle,
                 color: Color(hex: "#ebdbb2"),
                 color_hovered: Color(hex: "#fbf1c7"),
                 padding: Padding(left: 7.0, right: 7.0, top: 7.0, bottom: 0.0),
-                dimensions: (width: (min: 50, max: 150), height: (min: 0, max: 0)),
+                dimensions: (width: (min: 50, max: 200), height: (min: 0, max: 0)),
             )),
         ),
         (
@@ -65,7 +65,7 @@
             offset: Vec2(x: 0.0, y: -3.0),
             params: ScrollingTextBlock((
                 text: "%b",
-                font: "Arial 11",
+                font: "Noto Sans Mono 10",
                 color: Color(hex: "#ebdbb2"),
                 color_hovered: Color(hex: "#fbf1c7"),
                 padding: Padding(left: 7.0, right: 7.0, top: 3.0, bottom: 7.0),
